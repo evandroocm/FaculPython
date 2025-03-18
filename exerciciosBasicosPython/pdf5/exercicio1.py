@@ -5,3 +5,7 @@
 # teclado.
 # Como saída será impresso o texto, bem como a quantidade
 # de caracteres desse texto.
+
+texto = input("Digite seu texto: ")
+
+print(f"\nO texto possui {len(texto)} caracteres.")
