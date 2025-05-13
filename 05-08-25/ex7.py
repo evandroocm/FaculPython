@@ -1,18 +1,18 @@
 #-----VARIAVEIS-----#
 valor = 0
 soma = 0
-menor = float("inf")
 maior = float("-inf")
+menor = float("inf")
 
 for i in range(5):
     print("Digite o", i + 1, "º valor")
     valor = int(input())
     soma += valor
 
-    if(valor < menor):
-        menor = valor
-    elif(valor > maior):
+    if(valor > maior):
         maior = valor
+    elif(valor < menor):
+        menor = valor
 
 
 print(f"A soma é: {soma}")
