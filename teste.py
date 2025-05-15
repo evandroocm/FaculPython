@@ -1,3 +1,7 @@
-my_list = [[0, 1, 2, 3] for i in range(2)]
-print(my_list[2][0])
+my_list = [1, 2]
+ 
+for v in range(2):
+    my_list.insert(-1, my_list[v])
+ 
+print(my_list)
  
