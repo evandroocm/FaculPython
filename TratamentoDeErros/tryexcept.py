@@ -1,172 +1,140 @@
-#dicionarios, armazenar dados
 clientes = {}
 passagens = {}
 avioes = {}
 tripulacao = {}
 
-#menu principal
-def menu():
-    print("""\n==== Sistema de Passagem Aérea ====
+while True:
+    print("""
+==== Sistema de Passagem Aérea ====
 1. Cadastrar Cliente
 2. Cadastrar Passagem
 3. Cadastrar Avião
 4. Cadastrar Tripulação
 5. Relatórios
 6. Sair
-===================================\n""")
+===================================
+""")
 
-def cadastrar_cliente():
-    while True:
+    opcao = input('Escolha uma opção: ')
+
+    if opcao == '1':
         try:
             cpf = int(input('Digite o CPF do cliente (apenas números): '))
-            break
-        except ValueError:
-            print("Digite apenas números.")
-
-    if cpf in clientes:
-        print('Cliente já cadastrado!')
-        return
-
-    nome = input('Nome: ')
-    sobrenome = input('Sobrenome: ')
-
-    while True:
-        try:
+            if cpf in clientes:
+                print('Cliente já cadastrado!')
+                continue
+            nome = input('Nome: ')
+            sobrenome = input('Sobrenome: ')
             idade = int(input('Idade: '))
-            break
-        except ValueError:
-            print("Digite um número válido para a idade.")
-
-    while True:
-        try:
             rg = int(input('RG (Apenas números): '))
-            break
-        except ValueError:
-            print("Digite apenas números para o RG.")
-
-    while True:
-        try:
             telefone = int(input('Telefone (Apenas números): '))
-            break
+            endereco = input('Endereço: ')
+
+            clientes[cpf] = {
+                'nome': nome,
+                'sobrenome': sobrenome,
+                'idade': idade,
+                'rg': rg,
+                'cpf': cpf,
+                'telefone': telefone,
+                'endereco': endereco
+            }
+
+            print(f'Cliente {cpf} cadastrado com sucesso!')
         except ValueError:
-            print("Digite apenas números para o telefone.")
+            print('Erro! Digite apenas números nos campos numéricos.')
 
-    endereco = input('Endereço: ')
-
-    clientes[cpf] = {
-        'nome': nome,
-        'sobrenome': sobrenome,
-        'idade': idade,
-        'rg': rg,
-        'cpf': cpf,
-        'telefone': telefone,
-        'endereco': endereco
-    }
-
-    print(f'Cliente {cpf} adicionado com sucesso!')
-
-def cadastrar_passagem():
-    while True:
+    elif opcao == '2':
         try:
-            passagem = int(input('Digite o numero da Passagem: '))
-            break
+            numero = input('Numero da passagem: ')
+            if numero in passagens:
+                print('Passagem já cadastrada!')
+                continue
+            cpf = int(input('CPF do cliente: '))
+            if cpf not in clientes:
+                print('Cliente não cadastrado!')
+                continue
+            aviao = input('Código do avião: ')
+            if aviao not in avioes:
+                print('Avião não cadastrado!')
+                continue
+            trip = input('Código da tripulação: ')
+            if trip not in tripulacao:
+                print('Tripulação não cadastrada!')
+                continue
+            origem = input('Origem: ')
+            destino = input('Destino: ')
+            data = input('Data do voo: ')
+            horario = input('Horário do voo: ')
+
+            passagens[numero] = {
+                'cpf': cpf,
+                'aviao': aviao,
+                'tripulacao': trip,
+                'origem': origem,
+                'destino': destino,
+                'data': data,
+                'horario': horario
+            }
+
+            print(f'Passagem {numero} cadastrada com sucesso!')
         except ValueError:
-            print("Digite apenas números.")
+            print('Digite apenas numeros')
 
-    if passagem in clientes:
-        print('Cliente já cadastrado!')
-        return
-
-    nome = input('Nome: ')
-    sobrenome = input('Sobrenome: ')
-
-    while True:
+    elif opcao == '3':
+        codigo = input('Código do avião: ')
+        if codigo in avioes:
+            print('Avião já cadastrado!')
+            continue
+        modelo = input('Modelo: ')
         try:
-            idade = int(input('Idade: '))
-            break
+            capacidade = int(input('Capacidade (apenas números): '))
         except ValueError:
-            print("Digite um número válido para a idade.")
+            print('Capacidade deve ser um número.')
+            continue
 
-    while True:
-        try:
-            rg = int(input('RG (Apenas números): '))
-            break
-        except ValueError:
-            print("Digite apenas números para o RG.")
+        avioes[codigo] = {
+            'modelo': modelo,
+            'capacidade': capacidade
+        }
+        print(f'Avião {codigo} cadastrado com sucesso!')
 
-    while True:
-        try:
-            telefone = int(input('Telefone (Apenas números): '))
-            break
-        except ValueError:
-            print("Digite apenas números para o telefone.")
+    elif opcao == '4':
+        codigo = input('Código da tripulação: ')
+        if codigo in tripulacao:
+            print('Tripulação já cadastrada!')
+            continue
+        piloto = input('Nome do piloto: ')
+        copiloto = input('Nome do copiloto: ')
+        comissarios = input('Comissários (separados por vírgula): ').split(',')
+        tripulacao[codigo] = {
+            'piloto': piloto,
+            'copiloto': copiloto,
+            'comissarios': [c.strip() for c in comissarios]
+        }
+        print(f'Tripulação {codigo} cadastrada com sucesso!')
 
-    endereco = input('Endereço: ')
+    elif opcao == '5':
+        print("\nRelatório de Clientes: ")
+        for cpf, dados in clientes.items():
+            print(f"{cpf}: {dados['nome']} {dados['sobrenome']}")
 
-    clientes[cpf] = {
-        'nome': nome,
-        'sobrenome': sobrenome,
-        'idade': idade,
-        'rg': rg,
-        'cpf': cpf,
-        'telefone': telefone,
-        'endereco': endereco
-    }
+        print("\nRelatório de Passagens: ")
+        for num, dados in passagens.items():
+            nome_cliente = clientes.get(dados['cpf'], {}).get('nome', 'Desconhecido')
+            print(f"{num}: Cliente: {nome_cliente} - Origem: {dados['origem']} - Destino: {dados['destino']} - Data: {dados['data']}")
 
-    print(f'Cliente {cpf} adicionado com sucesso!')
+        print("\nRelatório de Aviões: ")
+        for codigo, dados in avioes.items():
+            print(f"{codigo}: Modelo: {dados['modelo']} - Capacidade: {dados['capacidade']}")
 
-    # if not clientes:
-    #     print('Nenhum cliente cadastrado.')
-    # else:
-    #     for nome, dados in clientes.items():
-    #         print(f'Nome: {nome} - Dados: {dados}')
+        print("\nRelatório de Tripulação: ")
+        for codigo, dados in tripulacao.items():
+            print(f"{codigo}: Piloto: {dados['piloto']} - Copiloto: {dados['copiloto']} - Comissários: {', '.join(dados['comissarios'])}")
 
-# def buscar_carro():
-#     nome = input('Digite o nome do carro para buscar: ')
-#     if nome in clientes:
-#         print(f'Dados do {nome}: {clientes[nome]}')
-#     else:
-#         print('Carro não encontrado.')
+    elif opcao == '6':
+        print('Saindo do sistema...')
+        break
 
-# def remover_carro():
-#     nome = input('Digite o nome do carro para remover: ')
-#     if nome in clientes:
-#         del clientes[nome]
-#         print(f'Carro {nome} removido com sucesso!')
-#     else:
-#         print('Carro não encontrado.')
-
-def relatorios():
-    print("""\n==== Relatórios ====
-        1. Relatório Clientes
-        2. Relatório Passagens
-        3. Relatório Aviões
-        4. Relatório Tripulação
-        5. Sair
-        ===================================\n""")
-
-def main():
-    while True:
-        menu()
-        opcao = input('Escolha uma opção: ')
-        if opcao == '1':
-            cadastrar_cliente()
-        elif opcao == '2':
-            cadastrar_passagem()
-        elif opcao == '3':
-            cadastrar_aviao()
-        elif opcao == '4':
-            cadastrar_tripulacao()
-        elif opcao == '5':
-            relatorios()
-            while True:
-                opcao = print('Escolha uma opção: ')
-                if opcao == '1':
-                    print("bla")
-        elif opcao == '6':
-            print('Saindo do sistema...')
-            break
-        else:
-            print('Opção inválida!')
-
-main()
+    else:
+        print('Opção inválida!')
