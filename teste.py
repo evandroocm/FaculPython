@@ -1,11 +1,13 @@
-try:
-    a = int(input("digite uma palavra"))
+f = open("file.txt", "r")
+print(f.read())
+f.close()
 
-except ValueError: #erro do tipo valor 
-    print("Digite apenas numeros")
+z = open("file.txt", "a")
+z.write("adicionando conteudo")
+z = open("file.txt", "r")
+print(z.read())
+z.close()
 
-except:
-    print("Erro desconhecido")
+f = open("file.txt", "w") #escrever
 
-finally:
-    print("final do algoritmo")
+f = open("file.txt", "x") #cria o arquivo especificado
